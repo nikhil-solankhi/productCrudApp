@@ -3,10 +3,10 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ProductEdit = () => {
-    let [details, setdetail] = useState("");
-    let [price, setprice] = useState("");
-    let [name, setname] = useState("");
-    let [discount, setdiscount] = useState("");
+    let [details, setdetail] = useState("details");
+    let [price, setprice] = useState("price");
+    let [name, setname] = useState("name");
+    let [discount, setdiscount] = useState("discount");
     let navigate = useNavigate();
     let { Prodid } = useParams();
     var Product;
@@ -22,27 +22,35 @@ const ProductEdit = () => {
     
 
     const [productform, setproductform] = useState({ details: "", price: "" ,name:"",discount:""});
-    const handleChange = (event) => {
-        console.log("In Handle Change Function");
-        const { name, value } = event.target;
-        setproductform({ ...productform, [name]: value })
-        console.log("name: " + name + " value: " + value);
-    }
+   
    
 
 
 
     const submitFun=(event)=>{
         event.preventDefault();
+
         if(ProductArr==null){
             ProductArr=[];
         }
-        Product={id:0,name:name,details:details,price:parseInt(price),discount:parseInt(discount)};     
+        if(name=="name"){
+            name=productRes.name;
+        }
+        if(price=="price"){
+            price=productRes.price;
+        }
+        if(discount=="discount"){
+            discount=productRes.discount;
+        }
+        if(details=="details"){
+            details=productRes.details;
+        }
+        Product={id:Prodid,name:name,details:details,price:parseInt(price),discount:parseInt(discount)};     
         console.log(Product);
         ProductArr.push(Product);
         console.log(ProductArr);
         
-       axios.post("http://localhost:8080/products",Product).then((res)=>{
+       axios.put("http://localhost:8080/products",Product).then((res)=>{
         console.log(res.data);
        })
 
@@ -58,19 +66,19 @@ const ProductEdit = () => {
 
                 <div>
                 <label>name: </label>
-                <input type="text"value={name} onChange={e => setname(e.target.value)}></input>
+                <input type="text"placeholder={productRes.name} onChange={e => setname(e.target.value)}></input>
                 </div>
                 <div>
                 <label>detail: </label>
-                <input type="text" value={details} onChange={e => setdetail(e.target.value)}></input>
+                <input type="text" placeholder={productRes.details} onChange={e => setdetail(e.target.value)}></input>
                 </div>
                 <div>
                 <label>price: </label>
-                <input type="number" value={price} onChange={e => setprice(e.target.value)}></input>
+                <input type="number" placeholder={productRes.price} onChange={e => setprice(e.target.value)}></input>
                 </div>
                 <div>
                 <label>discount: </label>
-                <input type="number" value={discount} onChange={e => setdiscount(e.target.value)}></input>
+                <input type="number" placeholder={productRes.discount} onChange={e => setdiscount(e.target.value)}></input>
                 </div>
                 <div>
                 <button type="submit" onClick={submitFun}>Submit</button>
