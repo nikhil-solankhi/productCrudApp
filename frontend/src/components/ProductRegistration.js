@@ -38,20 +38,20 @@ const ProductRegistration = () => {
             <form>
 
                 <div>
-                <label>name: </label>
-                <input type="text"value={name} onChange={e => setname(e.target.value)}></input>
+                <label>Name: </label>
+                <input type="text"value={name} onChange={e => setname(e.target.value)} required></input>
                 </div>
                 <div>
-                <label>detail: </label>
-                <input type="text" value={details} onChange={e => setdetail(e.target.value)}></input>
+                <label>Details: </label>
+                <input type="text" value={details} onChange={e => setdetail(e.target.value)} required></input>
                 </div>
                 <div>
-                <label>price: </label>
-                <input type="number" value={price} onChange={e => setprice(e.target.value)}></input>
+                <label>Price: </label>
+                <input type="number" value={price} onChange={e => setprice(e.target.value)} required></input>
                 </div>
                 <div>
-                <label>discount: </label>
-                <input type="number" value={discount} onChange={e => setdiscount(e.target.value)}></input>
+                <label>Discount: </label>
+                <input type="number" value={discount} onChange={e => setdiscount(e.target.value)} required></input>
                 </div>
                 <div>
                 <button type="submit" onClick={submitFun}>Submit</button>
