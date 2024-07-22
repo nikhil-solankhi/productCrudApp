@@ -25,29 +25,29 @@ public class ProductController {
 	private ProductService productService;
 
 	@GetMapping
-	public List<Product> getAllEmps() {
+	public List<Product> getAllProducts() {
 		return productService.getAllProducts();
 	}
 
 	@PostMapping
-	public Product saveEmpDetails(@RequestBody Product transientProduct) {
+	public Product saveProductDetails(@RequestBody Product transientProduct) {
 		return productService.add(transientProduct);
 
 	}
 
 	@DeleteMapping("/{id}")
-	public ApiResponse deleteEmpDetails(@PathVariable Long id) {
+	public ApiResponse deleteProductDetails(@PathVariable Long id) {
 	
 		return new ApiResponse(productService.delete(id));
 	}
 
 	@GetMapping("/{id}")
-	public Product getEmpDetails(@PathVariable Long id) {
+	public Product getProductDetails(@PathVariable Long id) {
 		return productService.fetchById(id);
 	}
 
 	@PutMapping
-	public Product updateEmpDetails(@RequestBody Product detachedProduct) {
+	public Product updateProductDetails(@RequestBody Product detachedProduct) {
 		return productService.update(detachedProduct);
 	}
 

@@ -1,0 +1,86 @@
+/* ProductDetails.css */
+
+.product-details-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-table th, .product-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+.product-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.product-table td button {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-table td button:hover {
+    background-color: #ff6666;
+}
+
+.product-table td a button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-table td a button:hover {
+    background-color: #66bb6a;
+}
+
+@media (max-width: 768px) {
+    .product-details-container {
+        padding: 10px;
+    }
+
+    .product-table th, .product-table td {
+        padding: 8px;
+    }
+
+    .product-table th {
+        font-size: 14px;
+    }
+
+    .product-table td {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-table th, .product-table td {
+        padding: 6px;
+        font-size: 12px;
+    }
+}

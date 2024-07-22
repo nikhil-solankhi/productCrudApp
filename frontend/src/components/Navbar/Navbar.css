@@ -1,0 +1,108 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: linear-gradient(45deg, #333, #555);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Make navbar full width */
+    position: fixed; /* Fix the navbar at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure the navbar is above other elements */
+}
+
+.navUl, .navUlLog {
+    display: flex;
+}
+
+.navUl ul, .navUlLog ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navLi {
+    margin: 0 20px;
+    padding: 10px 0; /* Add padding to the top and bottom of the navbar items */
+}
+
+.navLi a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s, transform 0.3s;
+    font-weight: bold;
+    position: relative; /* Relative positioning for the pseudo-element */
+}
+
+.navLi a:hover {
+    color: #ff9900;
+    transform: scale(1.1);
+}
+
+.navLi a:active {
+    color: #ff9900;
+}
+
+/* Pseudo-element for hover effect */
+.navLi::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #ff9900;
+    transition: width 0.3s;
+}
+
+.navLi:hover::before {
+    width: 100%;
+}
+
+/* Hover effect */
+.navLi a::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.navLi a:hover::before {
+    opacity: 1;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+    }
+
+    .navUl, .navUlLog {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .navLi {
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .navLi a {
+        font-size: 16px;
+    }
+
+    .navbar {
+        padding: 10px 20px;
+    }
+}
