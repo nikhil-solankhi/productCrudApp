@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/nikhil-solankhi/productCrudApp.git'
+                git branch: 'main', url: 'https://github.com/nikhil-solankhi/productCrudApp.git'
             }
         }
 
