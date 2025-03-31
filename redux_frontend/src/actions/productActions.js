@@ -6,7 +6,7 @@ export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const GET_PRODUCT = 'GET_PRODUCT';
 
-const API_URL = 'http://localhost:8080/products';
+const API_URL = 'http://localhost:8090/products';
 
 export const getProducts = () => async dispatch => {
     const response = await axios.get(API_URL);

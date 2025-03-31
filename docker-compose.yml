@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: spring_backend
+    depends_on:
+      mysql:
+        condition: service_healthy  # Ensures backend starts only when MySQL is ready
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./redux_frontend
+    container_name: react_frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./redux_frontend:/app
+    stdin_open: true
+    tty: true
+    command: sh -c "npm install && npm start"  # Ensure dependencies are installed
+
+volumes:
+  mysql_data:
+
