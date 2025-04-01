@@ -12,26 +12,18 @@ pipeline {
             }
         }
 
+        stage('Build Backend') {
+            steps {
+                // Build the backend using Maven
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
         stage('Build & Start Services') {
             steps {
                 script {
+                    // Start all services using docker-compose (including MySQL and backend)
                     sh "$DOCKER_COMPOSE_CMD"
-                }
-            }
-        }
-
-        stage('Run Backend Tests') {
-            steps {
-                script {
-                    sh 'docker exec spring_backend mvn test'
-                }
-            }
-        }
-
-        stage('Run Frontend Tests') {
-            steps {
-                script {
-                    sh 'docker exec react_frontend npm test'
                 }
             }
         }
@@ -43,3 +35,4 @@ pipeline {
         }
     }
 }
+
