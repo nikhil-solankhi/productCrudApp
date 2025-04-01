@@ -14,8 +14,10 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                // Build the backend using Maven
-                sh 'mvn clean package -DskipTests'
+                dir('backend') {
+                    // Build the backend using Maven (from the backend directory)
+                    sh 'mvn clean package -DskipTests'
+                }
             }
         }
 
