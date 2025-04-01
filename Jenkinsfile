@@ -29,7 +29,7 @@ pipeline {
                     script {
                         sh 'npm cache clean --force'
                         sh 'rm -rf node_modules package-lock.json'
-                        sh 'npm install -g npm@latest' // Ensure latest NPM version
+                        sh 'npm install -g npm@9' // Ensure latest NPM version
                         sh 'npm ci' // Install dependencies cleanly
                         sh 'npm run build' // Build React app
                     }
