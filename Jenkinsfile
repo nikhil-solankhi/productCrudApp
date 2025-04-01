@@ -11,6 +11,15 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/nikhil-solankhi/productCrudApp.git'
             }
         }
+        
+        stage('Update NPM') {
+            steps {
+                script {
+                    // Update NPM to the latest version
+                    sh 'npm install -g npm@latest'
+                }
+            }
+        }
 
         stage('Build Backend') {
             steps {
