@@ -11,21 +11,28 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/nikhil-solankhi/productCrudApp.git'
             }
         }
-        
-        stage('Update NPM') {
-            steps {
-                script {
-                    // Update NPM to the latest version
-                    sh 'npm install -g npm@latest'
-                }
-            }
-        }
 
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    // Build the backend using Maven (from the backend directory)
-                    sh 'mvn clean package -DskipTests'
+                    script {
+                        sh 'mvn clean package -DskipTests'
+                        sh 'ls -lh target/' // Verify the JAR file is created
+                    }
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('redux_frontend') {
+                    script {
+                        sh 'npm cache clean --force'
+                        sh 'rm -rf node_modules package-lock.json'
+                        sh 'npm install -g npm@latest' // Ensure latest NPM version
+                        sh 'npm ci' // Install dependencies cleanly
+                        sh 'npm run build' // Build React app
+                    }
                 }
             }
         }
@@ -33,7 +40,6 @@ pipeline {
         stage('Build & Start Services') {
             steps {
                 script {
-                    // Start all services using docker-compose (including MySQL and backend)
                     sh "$DOCKER_COMPOSE_CMD"
                 }
             }
