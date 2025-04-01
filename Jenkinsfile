@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_CMD = 'docker-compose up --build'
+        NPM_GLOBAL_PATH = "$HOME/.npm-global/bin"
     }
 
     stages {
@@ -23,15 +24,26 @@ pipeline {
             }
         }
 
+        stage('Setup NPM') {
+            steps {
+                script {
+                    sh 'mkdir -p $HOME/.npm-global'
+                    sh 'npm config set prefix $HOME/.npm-global'
+                    sh 'export PATH=$NPM_GLOBAL_PATH:$PATH'
+                    sh 'npm install -g npm@9'
+                }
+            }
+        }
+
         stage('Build Frontend') {
             steps {
                 dir('redux_frontend') {
                     script {
                         sh 'npm cache clean --force'
                         sh 'rm -rf node_modules package-lock.json'
-                        sh 'npm install -g npm@9' // Ensure latest NPM version
                         sh 'npm ci' // Install dependencies cleanly
                         sh 'npm run build' // Build React app
+                        sh 'ls -lh build/' // Verify React build output
                     }
                 }
             }
