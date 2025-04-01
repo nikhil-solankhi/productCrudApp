@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_CMD = 'docker compose up --build'
+        DOCKER_COMPOSE_CMD = 'docker-compose up --build'
     }
 
     stages {
