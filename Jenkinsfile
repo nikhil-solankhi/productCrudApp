@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_CMD = 'docker-compose up --build'
-        NPM_GLOBAL_PATH = "$HOME/.npm-global/bin"
+        DOCKER_COMPOSE_CMD = 'docker-compose up --build --force-recreate'
     }
 
     stages {
@@ -18,13 +17,13 @@ pipeline {
                 dir('backend') {
                     script {
                         sh 'mvn clean package -DskipTests'
-                        sh 'ls -lh target/' // Verify the JAR file is created
+                        sh 'ls -lh target/'
                     }
                 }
             }
         }
 
-       stage('Verify NPM') {
+        stage('Verify NPM') {
             steps {
                 sh 'npm -v'
                 sh 'node -v'
@@ -36,10 +35,10 @@ pipeline {
                 dir('redux_frontend') {
                     script {
                         sh 'npm cache clean --force'
-                        sh 'rm -rf node_modules package-lock.json'
-                        sh 'npm ci' // Install dependencies cleanly
-                        sh 'npm run build' // Build React app
-                        sh 'ls -lh build/' // Verify React build output
+                        sh 'rm -rf node_modules'
+                        sh '[ -f package-lock.json ] && npm ci || npm install'
+                        sh 'npm run build'
+                        sh 'ls -lh build/'
                     }
                 }
             }
@@ -55,9 +54,15 @@ pipeline {
 
         stage('Deployment') {
             steps {
-                echo "Application deployed successfully!"
+                echo "✅ Application deployed successfully!"
             }
         }
     }
-}
 
+    post {
+        always {
+            echo '🧹 Cleaning up Docker containers...'
+            sh 'docker-compose down'
+        }
+    }
+}
