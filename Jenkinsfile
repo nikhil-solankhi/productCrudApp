@@ -24,14 +24,10 @@ pipeline {
             }
         }
 
-        stage('Setup NPM') {
+       stage('Verify NPM') {
             steps {
-                script {
-                    sh 'mkdir -p $HOME/.npm-global'
-                    sh 'npm config set prefix $HOME/.npm-global'
-                    sh 'export PATH=$NPM_GLOBAL_PATH:$PATH'
-                    sh 'npm install -g npm@9'
-                }
+                sh 'npm -v'
+                sh 'node -v'
             }
         }
 
