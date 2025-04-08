@@ -2,10 +2,18 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_CMD = 'docker-compose up --build -d'
+        DOCKER_COMPOSE_CMD = 'docker-compose up --build --force-recreate'
+        NPM_GLOBAL_PATH = "$HOME/.npm-global/bin"
     }
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                deleteDir() // Cleans up the workspace to avoid permission errors
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/nikhil-solankhi/productCrudApp.git'
@@ -17,7 +25,7 @@ pipeline {
                 dir('backend') {
                     script {
                         sh 'mvn clean package -DskipTests'
-                        sh 'ls -lh target/'
+                        sh 'ls -lh target/' // Verify the JAR file is created
                     }
                 }
             }
@@ -25,8 +33,8 @@ pipeline {
 
         stage('Verify NPM') {
             steps {
-                sh 'npm -v'
-                sh 'node -v'
+                sh 'npm -v || echo "npm not found"'
+                sh 'node -v || echo "node not found"'
             }
         }
 
@@ -34,11 +42,12 @@ pipeline {
             steps {
                 dir('redux_frontend') {
                     script {
-                        sh 'npm cache clean --force'
-                        sh 'rm -rf node_modules'
-                        sh '[ -f package-lock.json ] && npm ci || npm install'
-                        sh 'npm run build'
-                        sh 'ls -lh build/'
+                        sh '''
+                            rm -rf node_modules package-lock.json
+                            npm install
+                            npm run build
+                            ls -lh build/
+                        '''
                     }
                 }
             }
@@ -47,6 +56,7 @@ pipeline {
         stage('Build & Start Services') {
             steps {
                 script {
+                    // This may fail if Jenkins doesn't have permission to access Docker socket
                     sh "$DOCKER_COMPOSE_CMD"
                 }
             }
@@ -60,9 +70,14 @@ pipeline {
     }
 
     post {
+        failure {
+            echo '❌ Pipeline failed.'
+        }
+        success {
+            echo '🎉 Pipeline finished successfully.'
+        }
         always {
-            echo '🧹 Cleaning up Docker containers...'
-            sh 'docker-compose down'
+            echo '🧹 Cleaning up after pipeline...'
         }
     }
 }

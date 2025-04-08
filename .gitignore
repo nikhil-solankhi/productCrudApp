@@ -1,0 +1,3 @@
+# .gitignore inside redux_frontend
+node_modules/
+.cache/
