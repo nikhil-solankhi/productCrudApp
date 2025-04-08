@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_CMD = 'docker-compose up --build --force-recreate'
+        DOCKER_COMPOSE_CMD = 'docker-compose up --build -d'
     }
 
     stages {
