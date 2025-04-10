@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clean Workspace') {
             steps {
-                deleteDir() // Cleans up the workspace to avoid permission errors
+                cleanWs() // Cleans up the workspace more gracefully
             }
         }
 
