@@ -20,17 +20,6 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                dir('backend') {
-                    script {
-                        sh 'mvn clean package -DskipTests'
-                        sh 'ls -lh target/' // Verify the JAR file is created
-                    }
-                }
-            }
-        }
-
         stage('Verify NPM') {
             steps {
                 sh 'npm -v || echo "npm not found"'
@@ -38,16 +27,32 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                dir('redux_frontend') {
-                    script {
-                        sh '''
-                            rm -rf node_modules package-lock.json
-                            npm install
-                            npm run build
-                            ls -lh build/
-                        '''
+        // Run backend and frontend build in parallel to save time
+        stage('Build') {
+            parallel {
+                stage('Build Backend') {
+                    steps {
+                        dir('backend') {
+                            script {
+                                sh 'mvn clean package -DskipTests' // Build the backend
+                                sh 'ls -lh target/' // Verify the JAR file is created
+                            }
+                        }
+                    }
+                }
+
+                stage('Build Frontend') {
+                    steps {
+                        dir('redux_frontend') {
+                            script {
+                                sh '''
+                                    rm -rf node_modules package-lock.json
+                                    npm install
+                                    npm run build
+                                    ls -lh build/
+                                '''
+                            }
+                        }
                     }
                 }
             }
